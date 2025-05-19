@@ -1,5 +1,11 @@
 #include "AVLtree.h"
 
+///////////////////////////////////////////////////////////////////////////////
+///
+///		Below are the Main function prototypes
+///
+///////////////////////////////////////////////////////////////////////////////
+
 /*******************************************************************************
 * Function Title: AVLtree
 * Summary: returns a NULL pointer. Basically makes using the tree more readable
@@ -22,8 +28,8 @@ node* AVLtree(void){
 * Outputs: n/a
 ********************************************************************************
 * Pseudocode
-*   Begin
-*   	set up temp variable
+*		Begin
+*			set up temp variable
 *			if there is a left child
 *				recursively call delete on left
 *			if there is a right child 
@@ -34,15 +40,15 @@ node* AVLtree(void){
 *******************************************************************************/
 void avl_free(node *root){					//	Begin
 	node *temp = root;								//		set up temp variable
-  if(temp->left != NULL){						//		if there is a left child
+	if(temp->left != NULL){						//		if there is a left child
 		avl_free(temp->left);			//			recursively call delete on left 
-  }
-  if(temp->right != NULL){					//		if there is a right child
+	}
+	if(temp->right != NULL){					//		if there is a right child
 		avl_free(temp->right);		//			recursively call delete on right
-  }
- 	free(temp->data);									//		free the data memory
- 	free(temp);												//		free the node memory
- 	return; 
+	}
+	free(temp->data);									//		free the data memory
+	free(temp);												//		free the node memory
+	return; 
 }																		//	End
 
 

@@ -34,12 +34,27 @@ git@github.com:jacklicn/CUnit.git
 
 This AVL tree is a general purpose AVL tree. It stores the data as `void *`	in 
 the tree, as such the user needs to correctly allocate memory for the data 
-to be stored. Data types that already have support are `char,int,float,double,char *, double complex`
+to be stored. Data types that already have support are `char, int, float, double, char *, double complex`
 
-To start the AVL tree you should perform the following actions
-
+Below is an example of how to use in your own code.
 ```c 
-	node *root = AVLtree();
+	#include "AVLtree.H"
+	#include <time.h>
+
+	int main(int argc, char **argv){
+		node *root = AVLtree();
+		node *temp_node;
+		srand(time(NULL));
+		void *to_insert = malloc(sizof(int));
+		for(int itr=0;itr < 15; ++itr){
+			*(int *)to_insert = rand();
+			temp_node = make_node(to_insert);
+			root = insert(temp_node,compare_int);
+		}
+		print_tree(root, print_int, stdout);
+		avl_free(root);
+		return 0;
+	}
 ```
 
 ## Unit Testing

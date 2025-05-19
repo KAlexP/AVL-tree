@@ -16,7 +16,7 @@
   typedef int (*CompareFunc)(const void *left, const void *right);
   typedef void (*PrintFunc)(node *to_print ,FILE *dest);
 
-  // Main Functions for interacting with AVLtree 
+  // Main Function prototypes
   node* AVLtree(void);
   void avl_free(node *root);
   void avl_delete(const void *data);
