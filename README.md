@@ -3,10 +3,10 @@
 An AVL tree written in c
 
 ## Table of Contents 
-- [Installation] (#installation)
-- [Usage] (#usage)
-- [Unit Testing] (#unit-testing)
-- [License] (#license)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Unit Testing](#unit-testing)
+- [License](#license)
 
 ## Installation
 
