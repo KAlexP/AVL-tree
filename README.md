@@ -2,12 +2,14 @@
 
 An AVL tree written in c
 
+<a id="table-of-contents"></a>
 ## Table of Contents 
 - [Installation](#installation)
 - [Usage](#usage)
 - [Unit Testing](#unit-testing)
 - [License](#license)
 
+<a id="installation"></a>
 ## Installation
 
 1. Clone the repository 
@@ -30,6 +32,7 @@ For other platforms here is the CUnit git repo:
 git@github.com:jacklicn/CUnit.git
 ```
 
+<a id="usage"></a>
 ## Usage 
 
 This AVL tree is a general purpose AVL tree. It stores the data as `void *`	in 
@@ -37,6 +40,7 @@ the tree, as such the user needs to correctly allocate memory for the data
 to be stored. Data types that already have support are `char, int, float, double, char *, double complex`
 
 Below is an example of how to use in your own code.
+
 ```c 
 	#include "AVLtree.H"
 	#include <time.h>
@@ -57,6 +61,7 @@ Below is an example of how to use in your own code.
 	}
 ```
 
+<a id="unit-testing"></a>
 ## Unit Testing
 
 This project uses cunit test framework for testing. Documentation can be found 
@@ -64,5 +69,8 @@ in the link below. Installation instructions can be found above in [Installation
 
 [https://cunit.sourceforge.net/doc/index.html](https://cunit.sourceforge.net/doc/index.html)
 
+<a id="license"></a>
 ## License
 This project is licensed under ...
+
+[table of contents](#table-of-contents)
