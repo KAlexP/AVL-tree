@@ -419,8 +419,100 @@ node *two_left_rotation(node *to_rotate) {
 ///
 ///////////////////////////////////////////////////////////////////////////////
 
+/******************************************************************************
+ *	Compare integer function
+ *****************************************************************************/
+int compare_int(const node *left, const node *right) {
+  if (NULL == left || NULL == right) {
+    printf("ERROR: don't pass NULL to compare; compare_int\n");
+    return 0;
+  }
+  if (*(int *)left->data > *(int *)right->data) {
+    return 1;
+  } else if (*(int *)left->data < *(int *)right->data) {
+    return -1;
+  }
+  return 0;
+}
+
+/******************************************************************************
+ *	Compare character function
+ *****************************************************************************/
+int compare_char(const node *left, const node *right) {
+  if (NULL == left || NULL == right) {
+    printf("ERROR: don't pass NULL to compare: compare_char\n");
+    return 0;
+  }
+  if (*(char *)left->data > *(char *)right->data) {
+    return 1;
+  } else if (*(char *)left->data < *(char *)right->data) {
+    return -1;
+  }
+  return 0;
+}
+
+/******************************************************************************
+ *	Compare float function
+ *****************************************************************************/
+int compare_float(const node *left, const node *right) {
+  if (NULL == left || NULL == right) {
+    printf("ERROR: don't pass NULL to compare: compare_float\n");
+    return 0;
+  }
+  if (*(float *)left->data > *(float *)right->data) {
+    return 1;
+  } else if (*(float *)left->data < *(float *)right->data) {
+    return -1;
+  }
+  return 0;
+}
+
+/******************************************************************************
+ *	Compare double function
+ *****************************************************************************/
+int compare_double(const node *left, const node *right) {
+  if (NULL == left || NULL == right) {
+    printf("ERROR: don't pass NULL to compare: compare_double\n");
+    return 0;
+  }
+  if (*(double *)left->data > *(double *)right->data) {
+    return 1;
+  } else if (*(double *)left->data < *(double *)right->data) {
+    return -1;
+  }
+  return 0;
+}
+
+/******************************************************************************
+ *	Compare string function
+ *****************************************************************************/
+int compare_string(const node *left, const node *right) {
+  if (NULL == left || NULL == right) {
+    printf("ERROR: don't pass NULL to compare: compare_float\n");
+  }
+  if (strcmp((char *)left->data, (char *)right->data) > 0) {
+    return 1;
+  } else if (strcmp((char *)left->data, (char *)right->data) < 0) {
+    return -1;
+  }
+  return 0;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 ///
-///		Below are the CompareFunc Definitions
+///		Below are the PrintFunc Definitions
 ///
 //////////////////////////////////////////////////////////////////////////////
+
+void print_int(node *to_print, FILE *dest) {
+  if (NULL == to_print) {
+    printf("ERROR: cannot print NULL node! --print_int--\n");
+    return;
+  }
+  if (NULL == dest) {
+    printf("ERROR: don't pass NULL file pointers! --print_int--\n");
+    return;
+  }
+  fprintf(dest, "(data: %d  ", *(int *)to_print->data);
+  fprintf(dest, "height: %d)", to_print->height);
+}
