@@ -247,6 +247,117 @@ void rec_print(node *curr, PrintFunc print, FILE *dest, int spaces){
 }
 
 
+/*******************************************************************************
+* Function Title:
+* Summary:
+*
+* Inputs:
+* Outputs:
+*
+* Compile Instructions:
+********************************************************************************
+* Pseudocode
+*   Begin
+*			if curr is null then 
+*				return NULL
+*			if left is too heavy 
+*				if left left is heavier 
+*					perform one right rotation
+*				else 
+*					perform double right rotation
+*			if right is too heavy 
+*				if right right is heavier 
+*					perform single left rotation 
+*				else 
+*					perform double right rotation
+*   End
+*******************************************************************************/
+node* balance(node *curr){
+  int temp_l = 0, temp_r = 0;
+	if(NULL == curr)
+		return curr;
+	if(curr->left->height - curr->right->height > ALLOWED_IMBALANCE){
+    temp_l = curr->left->left->height;
+		temp_r = curr->left->right->height;
+    if(temp_l >= temp_r){
+			// do single right rotation 
+    } else {
+			// do double right rotation 
+    }
+  } else 
+  if(curr->right->height - curr->left->height > ALLOWED_IMBALANCE){
+    temp_l = curr->right->left->height;
+    temp_r = curr->right->right->height;
+    if(temp_r >= temp_l) {
+			// do single left rotation
+    }	else {
+			// do double left rotation
+    }
+  }
+}
+
+
+/*******************************************************************************
+* Function Title: one_right_rotation
+* Summary: this performs a single right rotation
+*
+* Inputs:
+* 	node *to_rotate: this is the node that needs rotating
+* Outputs:
+* 	node *: this is a node pointer that is to the newly arranged nodes
+********************************************************************************
+* Pseudocode
+*   Begin
+*			assign the correct node to be the 'root' or the node that is returned 
+*			correctly save the node that could get lost 
+*			complete the rotation
+*			fix to_rotate's height
+*			fix new_root's height 
+*   End
+*******************************************************************************/
+node* one_right_rotation(node *to_rotate){
+	node * new_root = to_rotate->left;			// assigns nodes with correct 'root'
+  to_rotate->left = new_root->right;			// prevents data loss in switch
+	new_root->right = to_rotate;						// completes the movement of nodes
+ 	// fix to_rotate's height 
+  if(to_rotate->left->height > to_rotate->right->height){	
+  	to_rotate->height = to_rotate->left->height + 1;
+  } else {
+		to_rotate->height = to_rotate->right->height + 1;
+  }
+  // fix new_root's height
+  if(new_root->left->height > to_rotate->height){
+		new_root->height = to_rotate->height + 1;
+  } else {
+		new_root->height = to_rotate->height + 1;
+  }
+  // return the rotated nodes
+  return new_root;
+}
+
+
+/*******************************************************************************
+* Function Title: one_left_rotation
+* Summary: this performs a single left rotation
+*
+* Inputs:
+* 	node *to_rotate: this is the node that needs rotating
+* Outputs:
+* 	node *: this is a node pointer that is to the newly arranged nodes
+********************************************************************************
+* Pseudocode
+*   Begin
+*			assign the correct node to be the 'root' or the node that is returned 
+*			correctly save the node that could get lost 
+*			complete the rotation
+*			fix to_rotate's height
+*			fix new_root's height 
+*   End
+*******************************************************************************/
+node* one_left_rotation(node *to_rotate){
+	node *new_root = 
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 ///
 ///		Below are the CompareFunc Definitions

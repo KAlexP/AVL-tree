@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define ALLOWED_IMBALANCE 1
+
 	// node definition
 	typedef struct node{
 		void *data;
@@ -30,6 +32,7 @@
 
 	// Helper function prototypes
 	void rec_print(node *curr, PrintFunc print, FILE *dest,int spaces);
+  node* balance(node *curr);
   // CompareFunc prototypes 
   
 	// PrintFunc prototypes
