@@ -315,18 +315,20 @@ node* balance(node *curr){
 *			fix new_root's height 
 *   End
 *******************************************************************************/
+
+// CHECK NULL POINTERS!! This could segfault
 node* one_right_rotation(node *to_rotate){
 	node * new_root = to_rotate->left;			// assigns nodes with correct 'root'
   to_rotate->left = new_root->right;			// prevents data loss in switch
 	new_root->right = to_rotate;						// completes the movement of nodes
  	// fix to_rotate's height 
-  if(to_rotate->left->height > to_rotate->right->height){	
+  if(to_rotate->left->height >= to_rotate->right->height){	
   	to_rotate->height = to_rotate->left->height + 1;
   } else {
 		to_rotate->height = to_rotate->right->height + 1;
   }
   // fix new_root's height
-  if(new_root->left->height > to_rotate->height){
+  if(new_root->left->height >= to_rotate->height){
 		new_root->height = to_rotate->height + 1;
   } else {
 		new_root->height = to_rotate->height + 1;
@@ -354,8 +356,65 @@ node* one_right_rotation(node *to_rotate){
 *			fix new_root's height 
 *   End
 *******************************************************************************/
+
+// CHECK NULL POINTERS!! This could segfault
 node* one_left_rotation(node *to_rotate){
-	node *new_root = 
+	node *new_root = to_rotate->right;			// create temp node to return;
+	to_rotate->right = new_root->left;			// prevent data loss in rotation
+	new_root->left = to_rotate;
+	if(to_rotate->left->height >= to_rotate->right->height){
+		to_rotate->height = to_rotate->left->height + 1;
+  } else {
+		to_rotate->height = to_rotate->right->height + 1;
+  }
+  if(new_root->right->height >= to_rotate->height){
+		new_root->height = new_root->right->height;
+  } else {
+		new_root->height = to_rotate->height;
+  }
+  return new_root;
+}
+
+
+/*******************************************************************************
+* Function Title: two_right_rotation
+* Summary: this function performs a double right rotation as a helper function 
+* 				 for the balance function.
+* Inputs:
+* 	node *to_rotate: the node that needs rotated
+* Outputs:
+* 	node*: the pointer to the newly balanced node
+********************************************************************************
+* Pseudocode
+*   Begin
+*			left rotate to_rotate's left node. 
+*			right rotate to_rotate
+*   End
+*******************************************************************************/
+node* two_right_rotation(node *to_rotate){
+  to_rotate->left = one_left_rotation(to_rotate->left);
+  return one_right_rotation(to_rotate);
+}
+
+
+/*******************************************************************************
+* Function Title: two_left_rotation
+* Summary: this function persforms a double right rotation as a helper function 
+* 				 for the balnace function.
+* Inputs:
+* 	node *to_rotate: the node htat needs rotated
+* Outputs:
+* 	node*: the pinter to the newly balanced node
+********************************************************************************
+* Pseudocode
+*   Begin
+*			right rotate to_rotate's right node 
+*			left rotate to_rotate
+*   End
+*******************************************************************************/
+node* two_left_rotation(node *to_rotate){
+	to_rotate->right = one_right_rotation(to_rotate->right);
+  return one_left_rotation(to_rotate);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

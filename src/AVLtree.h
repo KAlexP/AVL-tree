@@ -33,6 +33,10 @@
 	// Helper function prototypes
 	void rec_print(node *curr, PrintFunc print, FILE *dest,int spaces);
   node* balance(node *curr);
+  node* one_right_rotation(node *to_rotate);
+  node* one_left_rotation(node *to_rotate);
+  node* two_right_rotation(node *to_rotate);
+  node* two_left_rotation(node *to_rotate);
   // CompareFunc prototypes 
   
 	// PrintFunc prototypes
