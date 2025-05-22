@@ -15,14 +15,14 @@
   } node;
 
 	// Function pointer definitions
-  typedef int (*CompareFunc)(const void *left, const void *right);
+  typedef int (*CompareFunc)(const node *left, const node *right);
   typedef void (*PrintFunc)(node *to_print ,FILE *dest);
 
   // Main Function prototypes
   node* AVLtree(void);
   void avl_free(node *root);
   void avl_delete(const void *data);
-  void insert(node *new_node,CompareFunc compare);
+  node*  insert(node *new_node,CompareFunc compare);
   node* make_node(void *data);
   node* find_min(node *root);
   void delete_min(void);
@@ -31,6 +31,7 @@
   void print_tree(node* root, PrintFunc print, FILE* dest);
 
 	// Helper function prototypes
+ 	node* rec_insert(node *new_node,node *curr,CompareFunc compare);
 	void rec_print(node *curr, PrintFunc print, FILE *dest,int spaces);
   node* balance(node *curr);
   node* one_right_rotation(node *to_rotate);

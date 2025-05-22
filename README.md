@@ -5,6 +5,7 @@ An AVL tree written in c
 <a id="table-of-contents"></a>
 ## Table of Contents 
 - [Installation](#installation)
+- [Formatting](#formatting)
 - [Usage](#usage)
 - [Unit Testing](#unit-testing)
 - [License](#license)
@@ -31,6 +32,22 @@ For other platforms here is the CUnit git repo:
 ```bash
 git@github.com:jacklicn/CUnit.git
 ```
+
+<a id="formatting"></a>
+## Formatting
+
+This project uses `clang-format` to enforce consistent C/C++ style.
+
+### How to format
+- Install `clang-format`
+- Use the provided `.clang-format` file
+- You can auto-format with:
+
+```bash
+clang-format -i file_name.c
+```
+
+Depending on your IDE there are ways to automate the code formatting.
 
 <a id="usage"></a>
 ## Usage 
