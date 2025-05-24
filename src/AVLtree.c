@@ -440,7 +440,7 @@ int compare_int(const node *left, const node *right) {
  *****************************************************************************/
 int compare_char(const node *left, const node *right) {
   if (NULL == left || NULL == right) {
-    printf("ERROR: don't pass NULL to compare: compare_char\n");
+    printf("ERROR: don't pass NULL to compare; compare_char\n");
     return 0;
   }
   if (*(char *)left->data > *(char *)right->data) {
@@ -456,7 +456,7 @@ int compare_char(const node *left, const node *right) {
  *****************************************************************************/
 int compare_float(const node *left, const node *right) {
   if (NULL == left || NULL == right) {
-    printf("ERROR: don't pass NULL to compare: compare_float\n");
+    printf("ERROR: don't pass NULL to compare; compare_float\n");
     return 0;
   }
   if (*(float *)left->data > *(float *)right->data) {
@@ -472,7 +472,7 @@ int compare_float(const node *left, const node *right) {
  *****************************************************************************/
 int compare_double(const node *left, const node *right) {
   if (NULL == left || NULL == right) {
-    printf("ERROR: don't pass NULL to compare: compare_double\n");
+    printf("ERROR: don't pass NULL to compare; compare_double\n");
     return 0;
   }
   if (*(double *)left->data > *(double *)right->data) {
@@ -488,7 +488,7 @@ int compare_double(const node *left, const node *right) {
  *****************************************************************************/
 int compare_string(const node *left, const node *right) {
   if (NULL == left || NULL == right) {
-    printf("ERROR: don't pass NULL to compare: compare_float\n");
+    printf("ERROR: don't pass NULL to compare; compare_float\n");
   }
   if (strcmp((char *)left->data, (char *)right->data) > 0) {
     return 1;
@@ -504,15 +504,82 @@ int compare_string(const node *left, const node *right) {
 ///
 //////////////////////////////////////////////////////////////////////////////
 
+/******************************************************************************
+ *	print_integer function (node *to_print, FILE *dest)
+ *****************************************************************************/
 void print_int(node *to_print, FILE *dest) {
   if (NULL == to_print) {
-    printf("ERROR: cannot print NULL node! --print_int--\n");
+    printf("ERROR: cannot print NULL node; print_int\n");
     return;
   }
   if (NULL == dest) {
-    printf("ERROR: don't pass NULL file pointers! --print_int--\n");
+    printf("ERROR: don't pass NULL file pointers; print_int\n");
     return;
   }
   fprintf(dest, "(data: %d  ", *(int *)to_print->data);
+  fprintf(dest, "height: %d)", to_print->height);
+}
+
+/******************************************************************************
+ *	print_char function (node *to_print, FILE *dest)
+ *****************************************************************************/
+void print_char(node *to_print, FILE *dest) {
+  if (NULL == to_print) {
+    printf("ERROR: cannot print NULL node; print_char\n");
+    return;
+  }
+  if (NULL == dest) {
+    printf("ERROR: don't pass NULL file pointers; print_char\n");
+    return;
+  }
+  fprintf(dest, "(data: %c  ", *(char *)to_print->data);
+  fprintf(dest, "height: %d)", to_print->height);
+}
+
+/******************************************************************************
+ *	print_float function (node *to_print, FILE *dest)
+ *****************************************************************************/
+void print_float(node *to_print, FILE *dest) {
+  if (NULL == to_print) {
+    printf("ERROR: cannot print NULL node; print_float\n");
+    return;
+  }
+  if (NULL == dest) {
+    printf("ERROR: don't pass NULL file pointers; print_float\n");
+    return;
+  }
+  fprintf(dest, "(data: %f  ", *(float *)to_print->data);
+  fprintf(dest, "height: %d)", to_print->height);
+}
+
+/******************************************************************************
+ *	print_double function (node *to_print, FILE *dest)
+ *****************************************************************************/
+void print_double(node *to_print, FILE *dest) {
+  if (NULL == to_print) {
+    printf("ERROR: cannot print NULL node; print_double\n");
+    return;
+  }
+  if (NULL == dest) {
+    printf("ERROR: don't pass NULL file pointers; print_double\n");
+    return;
+  }
+  fprintf(dest, "(data: %lf  ", *(double *)to_print->data);
+  fprintf(dest, "height: %d)", to_print->height);
+}
+
+/******************************************************************************
+ *	print_string function (node *to_print, FILE *dest)
+ *****************************************************************************/
+void print_string(node *to_print, FILE *dest) {
+  if (NULL == to_print) {
+    printf("ERROR: cannot print NULL node; print_string\n");
+    return;
+  }
+  if (NULL == dest) {
+    printf("ERROR: don't pass NULL file pointers; print_string\n");
+    return;
+  }
+  fprintf(dest, "(data: %s  ", (char *)to_print->data);
   fprintf(dest, "height: %d)", to_print->height);
 }
