@@ -49,5 +49,9 @@ int compare_string(const node *left, const node *right);
 
 // PrintFunc prototypes
 void print_int(node *to_print, FILE *dest);
+void print_char(node *to_print, FILE *dest);
+void print_float(node *to_print, FILE *dest);
+void print_double(node *to_print, FILE *dest);
+void print_string(node *to_print, FILE *dest);
 
 #endif

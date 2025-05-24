@@ -31,8 +31,11 @@ node *AVLtree(void) { return NULL; }
  *				recursively call delete on left
  *			if there is a right child
  *				recursively call delete on right
- *			free the data memory
- *			free the node memory
+ *			if node memory isn't NULL
+ *				if data memory isn't NULL
+ *					free the data memory
+ *				free the node memory
+ *				set pointers to NULL to prevent bad access
  *   End
  *******************************************************************************/
 void avl_free(node *root) { //	Begin
@@ -43,8 +46,13 @@ void avl_free(node *root) { //	Begin
   if (temp->right != NULL) { //		if there is a right child
     avl_free(temp->right);   //			recursively call delete on right
   }
-  free(temp->data); //		free the data memory
-  free(temp);       //		free the node memory
+  if (temp != NULL) {
+    if (temp->data != NULL)
+      free(temp->data); //		free the data memory
+    free(temp);         //		free the node memory
+    temp->data = NULL;  // set pointers to NULL to prevent bad access
+    temp = NULL;
+  }
   return;
 } //	End
 

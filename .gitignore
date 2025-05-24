@@ -4,4 +4,5 @@ exe/
 
 # files to ignore
 *.o
+*.swp
 .DS_Store
