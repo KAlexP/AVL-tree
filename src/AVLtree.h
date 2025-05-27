@@ -23,7 +23,7 @@ typedef void (*PrintFunc)(node *to_print, FILE *dest);
 node *AVLtree(void);
 void avl_free(node *root);
 void avl_delete(const void *data);
-node *insert(node *new_node, CompareFunc compare);
+void insert(node **root, node *to_insert, CompareFunc compare);
 node *make_node(void *data);
 node *find_min(node *root);
 void delete_min(void);
@@ -39,6 +39,7 @@ node *one_right_rotation(node *to_rotate);
 node *one_left_rotation(node *to_rotate);
 node *two_right_rotation(node *to_rotate);
 node *two_left_rotation(node *to_rotate);
+int height(node *node);
 
 // CompareFunc prototypes
 int compare_int(const node *left, const node *right);
@@ -53,5 +54,6 @@ void print_char(node *to_print, FILE *dest);
 void print_float(node *to_print, FILE *dest);
 void print_double(node *to_print, FILE *dest);
 void print_string(node *to_print, FILE *dest);
+void print_int2(node *to_print, FILE *dest);
 
 #endif

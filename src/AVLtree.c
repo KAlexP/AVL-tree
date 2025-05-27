@@ -57,6 +57,29 @@ void avl_free(node *root) { //	Begin
 } //	End
 
 /*******************************************************************************
+ * Function Title: insert
+ * Summary: easier to use function to insert nodes into the avl tree
+ *
+ * Inputs:
+ * 	node **root: the pointer to adjust the root if necessary
+ * 	node *to_insert: the node that is to be entered
+ * 	CompareFunc: the function that will be used to compare in tree
+ * Outputs: n/a
+ ********************************************************************************
+ * Pseudocode
+ *   Begin
+ *
+ *   End
+ *******************************************************************************/
+void insert(node **root, node *to_insert, CompareFunc compare) {
+  if (*root == NULL) {
+    *root = to_insert;
+  } else {
+    *root = rec_insert(to_insert, *root, compare);
+  }
+}
+
+/*******************************************************************************
  * Function Title: make_node
  * Summary: this function creates a node.
  *
@@ -213,6 +236,16 @@ node *rec_insert(node *new_node, node *curr, CompareFunc compare) {
     printf("ERROR: cannot insert nothing!\n");
     return NULL;
   }
+  if (curr == new_node) {
+    printf("don't insert node that already exists\n");
+    return NULL;
+  }
+  if (NULL == curr) {
+    return new_node;
+  }
+  if (NULL == curr->data) {
+    return curr;
+  }
   int compare_results = compare(curr, new_node);
   if (compare_results < 0) {
     curr->left = rec_insert(new_node, curr->left, compare);
@@ -243,11 +276,14 @@ node *rec_insert(node *new_node, node *curr, CompareFunc compare) {
  *******************************************************************************/
 void rec_print(node *curr, PrintFunc print, FILE *dest, int spaces) {
   if (NULL != curr) {
-    rec_print(curr, print, dest, spaces + 4);
+    if (curr->left != NULL)
+      rec_print(curr->left, print, dest, spaces + 4);
     for (int i = 0; i < spaces; ++i)
       fprintf(dest, " ");
     print(curr, dest);
-    rec_print(curr, print, dest, spaces + 4);
+    fprintf(dest, "\n");
+    if (curr->right != NULL)
+      rec_print(curr->right, print, dest, spaces + 4);
   }
 }
 
@@ -280,9 +316,9 @@ node *balance(node *curr) {
   int temp_l = 0, temp_r = 0;
   if (NULL == curr)
     return curr;
-  if (curr->left->height - curr->right->height > ALLOWED_IMBALANCE) {
-    temp_l = curr->left->left->height;
-    temp_r = curr->left->right->height;
+  if (height(curr->left) - height(curr->right) > ALLOWED_IMBALANCE) {
+    temp_l = height(curr->left->left);
+    temp_r = height(curr->left->right);
     if (temp_l >= temp_r) {
       // do single right rotation
       curr = one_right_rotation(curr);
@@ -290,9 +326,9 @@ node *balance(node *curr) {
       // do double right rotation
       curr = two_right_rotation(curr);
     }
-  } else if (curr->right->height - curr->left->height > ALLOWED_IMBALANCE) {
-    temp_l = curr->right->left->height;
-    temp_r = curr->right->right->height;
+  } else if (height(curr->right) - height(curr->left) > ALLOWED_IMBALANCE) {
+    temp_l = height(curr->right->left);
+    temp_r = height(curr->right->right);
     if (temp_r >= temp_l) {
       // do single left rotation
       curr = one_left_rotation(curr);
@@ -301,6 +337,10 @@ node *balance(node *curr) {
       curr = two_left_rotation(curr);
     }
   }
+  curr->height = (height(curr->left) > height(curr->right))
+                     ? height(curr->left)
+                     : height(curr->right);
+  curr->height += 1;
   return curr;
 }
 
@@ -421,6 +461,27 @@ node *two_left_rotation(node *to_rotate) {
   return one_left_rotation(to_rotate);
 }
 
+/*******************************************************************************
+ * Function Title: height
+ * Summary: this function gets the correct height of a node
+ *
+ * Inputs:
+ * 	node *t: the nod in question
+ * Outputs:
+ *		int: the value of the height
+ ********************************************************************************
+ * Pseudocode
+ *   Begin
+ *
+ *   End
+ *******************************************************************************/
+int height(node *node) {
+  if (NULL == node) {
+    return -1;
+  } else
+    return node->height;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 ///
 ///		Below are the CompareFunc Definitions
@@ -524,7 +585,11 @@ void print_int(node *to_print, FILE *dest) {
     printf("ERROR: don't pass NULL file pointers; print_int\n");
     return;
   }
-  fprintf(dest, "(data: %d  ", *(int *)to_print->data);
+  if (to_print->data == NULL) {
+    fprintf(dest, "(data: NULL ");
+  } else {
+    fprintf(dest, "(data: %d  ", *(int *)to_print->data);
+  }
   fprintf(dest, "height: %d)", to_print->height);
 }
 
@@ -590,4 +655,24 @@ void print_string(node *to_print, FILE *dest) {
   }
   fprintf(dest, "(data: %s  ", (char *)to_print->data);
   fprintf(dest, "height: %d)", to_print->height);
+}
+
+/******************************************************************************
+ *	print_integer function (node *to_print, FILE *dest)
+ *****************************************************************************/
+void print_int2(node *to_print, FILE *dest) {
+  if (NULL == to_print) {
+    printf("ERROR: cannot print NULL node; print_int\n");
+    return;
+  }
+  if (NULL == dest) {
+    printf("ERROR: don't pass NULL file pointers; print_int\n");
+    return;
+  }
+  if (to_print->data == NULL) {
+    fprintf(dest, "(NULL");
+  } else {
+    fprintf(dest, "(%d,", *(int *)to_print->data);
+  }
+  fprintf(dest, "%d)\n", height(to_print));
 }
