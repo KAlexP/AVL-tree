@@ -39,6 +39,9 @@ node *AVLtree(void) { return NULL; }
  *   End
  *******************************************************************************/
 void avl_free(node *root) { //	Begin
+  if (root == NULL) {
+    return;
+  }
   node *temp = root;        //		set up temp variable
   if (temp->left != NULL) { //		if there is a left child
     avl_free(temp->left);   //			recursively call delete on left
@@ -50,7 +53,6 @@ void avl_free(node *root) { //	Begin
     if (temp->data != NULL)
       free(temp->data); //		free the data memory
     free(temp);         //		free the node memory
-    temp->data = NULL;  // set pointers to NULL to prevent bad access
     temp = NULL;
   }
   return;
@@ -236,9 +238,12 @@ node *rec_insert(node *new_node, node *curr, CompareFunc compare) {
     printf("ERROR: cannot insert nothing!\n");
     return NULL;
   }
-  if (curr == new_node) {
+  if (compare(new_node, curr) == 0) {
     printf("don't insert node that already exists\n");
-    return NULL;
+    free(new_node->data);
+    free(new_node);
+    new_node = NULL;
+    return curr;
   }
   if (NULL == curr) {
     return new_node;
@@ -369,16 +374,16 @@ node *one_right_rotation(node *to_rotate) {
   to_rotate->left = new_root->right; // prevents data loss in switch
   new_root->right = to_rotate;       // completes the movement of nodes
   // fix to_rotate's height
-  if (to_rotate->left->height >= to_rotate->right->height) {
-    to_rotate->height = to_rotate->left->height + 1;
+  if (height(to_rotate->left) >= height(to_rotate->right)) {
+    to_rotate->height = height(to_rotate->left) + 1;
   } else {
-    to_rotate->height = to_rotate->right->height + 1;
+    to_rotate->height = height(to_rotate->right) + 1;
   }
   // fix new_root's height
-  if (new_root->left->height >= to_rotate->height) {
-    new_root->height = to_rotate->height + 1;
+  if (height(new_root->left) >= height(to_rotate)) {
+    new_root->height = height(to_rotate) + 1;
   } else {
-    new_root->height = to_rotate->height + 1;
+    new_root->height = height(to_rotate) + 1;
   }
   // return the rotated nodes
   return new_root;
@@ -408,15 +413,15 @@ node *one_left_rotation(node *to_rotate) {
   node *new_root = to_rotate->right; // create temp node to return;
   to_rotate->right = new_root->left; // prevent data loss in rotation
   new_root->left = to_rotate;
-  if (to_rotate->left->height >= to_rotate->right->height) {
-    to_rotate->height = to_rotate->left->height + 1;
+  if (height(to_rotate->left) >= height(to_rotate->right)) {
+    to_rotate->height = height(to_rotate->left) + 1;
   } else {
-    to_rotate->height = to_rotate->right->height + 1;
+    to_rotate->height = height(to_rotate->right) + 1;
   }
-  if (new_root->right->height >= to_rotate->height) {
-    new_root->height = new_root->right->height;
+  if (height(new_root->right) >= height(to_rotate)) {
+    new_root->height = height(new_root->right);
   } else {
-    new_root->height = to_rotate->height;
+    new_root->height = height(to_rotate);
   }
   return new_root;
 }
@@ -494,14 +499,12 @@ int height(node *node) {
 int compare_int(const node *left, const node *right) {
   if (NULL == left || NULL == right) {
     printf("ERROR: don't pass NULL to compare; compare_int\n");
-    return 0;
+    printf("l: %p\tr: %p\n", left, right);
+    return 45;
   }
-  if (*(int *)left->data > *(int *)right->data) {
-    return 1;
-  } else if (*(int *)left->data < *(int *)right->data) {
-    return -1;
-  }
-  return 0;
+  int l = *(int *)left->data;
+  int r = *(int *)right->data;
+  return (l > r) - (l < r);
 }
 
 /******************************************************************************
@@ -510,7 +513,7 @@ int compare_int(const node *left, const node *right) {
 int compare_char(const node *left, const node *right) {
   if (NULL == left || NULL == right) {
     printf("ERROR: don't pass NULL to compare; compare_char\n");
-    return 0;
+    return 45;
   }
   if (*(char *)left->data > *(char *)right->data) {
     return 1;
@@ -526,7 +529,7 @@ int compare_char(const node *left, const node *right) {
 int compare_float(const node *left, const node *right) {
   if (NULL == left || NULL == right) {
     printf("ERROR: don't pass NULL to compare; compare_float\n");
-    return 0;
+    return 45;
   }
   if (*(float *)left->data > *(float *)right->data) {
     return 1;
@@ -542,7 +545,7 @@ int compare_float(const node *left, const node *right) {
 int compare_double(const node *left, const node *right) {
   if (NULL == left || NULL == right) {
     printf("ERROR: don't pass NULL to compare; compare_double\n");
-    return 0;
+    return 45;
   }
   if (*(double *)left->data > *(double *)right->data) {
     return 1;
@@ -558,6 +561,7 @@ int compare_double(const node *left, const node *right) {
 int compare_string(const node *left, const node *right) {
   if (NULL == left || NULL == right) {
     printf("ERROR: don't pass NULL to compare; compare_float\n");
+    return 45;
   }
   if (strcmp((char *)left->data, (char *)right->data) > 0) {
     return 1;
@@ -674,5 +678,5 @@ void print_int2(node *to_print, FILE *dest) {
   } else {
     fprintf(dest, "(%d,", *(int *)to_print->data);
   }
-  fprintf(dest, "%d)\n", height(to_print));
+  fprintf(dest, "%d)", height(to_print));
 }
