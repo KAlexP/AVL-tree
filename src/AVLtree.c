@@ -280,10 +280,11 @@ node *rec_insert(node *new_node, node *curr, CompareFunc compare) {
  *   End
  *******************************************************************************/
 void rec_print(node *curr, PrintFunc print, FILE *dest, int spaces) {
+  int i;
   if (NULL != curr) {
     if (curr->left != NULL)
       rec_print(curr->left, print, dest, spaces + 4);
-    for (int i = 0; i < spaces; ++i)
+    for (i = 0; i < spaces; ++i)
       fprintf(dest, " ");
     print(curr, dest);
     fprintf(dest, "\n");

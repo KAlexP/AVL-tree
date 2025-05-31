@@ -6,6 +6,7 @@ int main(void) {
   node *root = AVLtree();
   void *data = malloc(sizeof(int));
   node *temp;
+  int x;
   /*
 
   *(int *)data = 22;
@@ -23,12 +24,13 @@ int main(void) {
   insert(&root, temp, compare_int);
   print_tree(root, print_int, stdout);
 */
-  for (int x = 0; x < 13; ++x) {
-    printf("inserting %d...\n\n", nums[x]);
+  for (x = 0; x < 13; ++x) {
+    printf("inserting %d...\n", nums[x]);
     data = malloc(sizeof(int));
     *(int *)data = nums[x];
     temp = make_node(data);
     insert(&root, temp, compare_int);
+    printf("insert complete...\n");
     print_tree(root, print_int, stdout);
   }
   data = malloc(sizeof(int));
