@@ -144,7 +144,12 @@ node *find_min(node *root) {
  *
  *   End
  *******************************************************************************/
-void delete_min(void) {}
+void delete_min(node *root) {
+  node *to_delete = find_min(root);
+  free(to_delete->data);
+  free(to_delete);
+  to_delete = NULL;
+}
 
 /*******************************************************************************
  * Function Title: find_max
@@ -184,7 +189,12 @@ node *find_max(node *root) {
  *
  *   End
  *******************************************************************************/
-void delete_max(void) {}
+void delete_max(node *root) {
+  node *to_delete = find_max(root);
+  free(to_delete->data);
+  free(to_delete);
+  to_delete = NULL;
+}
 
 /*******************************************************************************
  * Function Title: print_tree
@@ -229,17 +239,33 @@ void print_tree(node *tree, PrintFunc print, FILE *dest) {
  *
  ********************************************************************************
  * Pseudocode
- *   Begin
- *
- *   End
+ *		Begin
+ *			create compare int
+ *			if node to insert is null
+ *				print error
+ *				insert curr to tree
+ *			if new_node is equal to the node to insert
+ *				free the memory for the node data
+ *				free the memory for the node
+ *				set the node to null to prevent bad access
+ *				insert curr to tree
+ *			if curr is null
+ *				insert new node to the tree
+ *			set conpare int
+ *			if new_node is smaller
+ *				insert to the left
+ *			else
+ *				insert to the right
+ *			return a balanced subtree
+ *   	End
  *******************************************************************************/
 node *rec_insert(node *new_node, node *curr, CompareFunc compare) {
+  int compare_results;
   if (NULL == new_node) {
     printf("ERROR: cannot insert nothing!\n");
-    return NULL;
+    return curr;
   }
   if (compare(new_node, curr) == 0) {
-    printf("don't insert node that already exists\n");
     free(new_node->data);
     free(new_node);
     new_node = NULL;
@@ -248,10 +274,7 @@ node *rec_insert(node *new_node, node *curr, CompareFunc compare) {
   if (NULL == curr) {
     return new_node;
   }
-  if (NULL == curr->data) {
-    return curr;
-  }
-  int compare_results = compare(curr, new_node);
+  compare_results = compare(curr, new_node);
   if (compare_results < 0) {
     curr->left = rec_insert(new_node, curr->left, compare);
   } else {
@@ -499,8 +522,7 @@ int height(node *node) {
  *****************************************************************************/
 int compare_int(const node *left, const node *right) {
   if (NULL == left || NULL == right) {
-    printf("ERROR: don't pass NULL to compare; compare_int\n");
-    printf("l: %p\tr: %p\n", left, right);
+    // printf("ERROR: don't pass NULL to compare; compare_int\n");
     return 45;
   }
   int l = *(int *)left->data;
@@ -513,7 +535,7 @@ int compare_int(const node *left, const node *right) {
  *****************************************************************************/
 int compare_char(const node *left, const node *right) {
   if (NULL == left || NULL == right) {
-    printf("ERROR: don't pass NULL to compare; compare_char\n");
+    // printf("ERROR: don't pass NULL to compare; compare_char\n");
     return 45;
   }
   if (*(char *)left->data > *(char *)right->data) {
@@ -529,7 +551,7 @@ int compare_char(const node *left, const node *right) {
  *****************************************************************************/
 int compare_float(const node *left, const node *right) {
   if (NULL == left || NULL == right) {
-    printf("ERROR: don't pass NULL to compare; compare_float\n");
+    // printf("ERROR: don't pass NULL to compare; compare_float\n");
     return 45;
   }
   if (*(float *)left->data > *(float *)right->data) {
@@ -545,7 +567,7 @@ int compare_float(const node *left, const node *right) {
  *****************************************************************************/
 int compare_double(const node *left, const node *right) {
   if (NULL == left || NULL == right) {
-    printf("ERROR: don't pass NULL to compare; compare_double\n");
+    // printf("ERROR: don't pass NULL to compare; compare_double\n");
     return 45;
   }
   if (*(double *)left->data > *(double *)right->data) {
@@ -561,7 +583,7 @@ int compare_double(const node *left, const node *right) {
  *****************************************************************************/
 int compare_string(const node *left, const node *right) {
   if (NULL == left || NULL == right) {
-    printf("ERROR: don't pass NULL to compare; compare_float\n");
+    // printf("ERROR: don't pass NULL to compare; compare_float\n");
     return 45;
   }
   if (strcmp((char *)left->data, (char *)right->data) > 0) {
@@ -583,19 +605,19 @@ int compare_string(const node *left, const node *right) {
  *****************************************************************************/
 void print_int(node *to_print, FILE *dest) {
   if (NULL == to_print) {
-    printf("ERROR: cannot print NULL node; print_int\n");
+    printf("ERROR: cannot print NULL node; print_int-%p\n", to_print);
     return;
   }
   if (NULL == dest) {
-    printf("ERROR: don't pass NULL file pointers; print_int\n");
+    printf("ERROR: don't pass NULL file pointers; print_int-%p\n", dest);
     return;
   }
   if (to_print->data == NULL) {
-    fprintf(dest, "(data: NULL ");
+    fprintf(dest, "(d: NULL");
   } else {
-    fprintf(dest, "(data: %d  ", *(int *)to_print->data);
+    fprintf(dest, "(d: %d,", *(int *)to_print->data);
   }
-  fprintf(dest, "height: %d)", to_print->height);
+  fprintf(dest, "h: %d)", to_print->height);
 }
 
 /******************************************************************************
@@ -610,8 +632,8 @@ void print_char(node *to_print, FILE *dest) {
     printf("ERROR: don't pass NULL file pointers; print_char\n");
     return;
   }
-  fprintf(dest, "(data: %c  ", *(char *)to_print->data);
-  fprintf(dest, "height: %d)", to_print->height);
+  fprintf(dest, "(d: %c,", *(char *)to_print->data); // d(data):
+  fprintf(dest, "h: %d)", to_print->height);         // h(height):
 }
 
 /******************************************************************************
@@ -626,8 +648,8 @@ void print_float(node *to_print, FILE *dest) {
     printf("ERROR: don't pass NULL file pointers; print_float\n");
     return;
   }
-  fprintf(dest, "(data: %f  ", *(float *)to_print->data);
-  fprintf(dest, "height: %d)", to_print->height);
+  fprintf(dest, "(d: %f,", *(float *)to_print->data);
+  fprintf(dest, "h: %d)", to_print->height);
 }
 
 /******************************************************************************
@@ -642,8 +664,8 @@ void print_double(node *to_print, FILE *dest) {
     printf("ERROR: don't pass NULL file pointers; print_double\n");
     return;
   }
-  fprintf(dest, "(data: %lf  ", *(double *)to_print->data);
-  fprintf(dest, "height: %d)", to_print->height);
+  fprintf(dest, "(d: %lf,", *(double *)to_print->data);
+  fprintf(dest, "h: %d)", to_print->height);
 }
 
 /******************************************************************************
@@ -658,8 +680,8 @@ void print_string(node *to_print, FILE *dest) {
     printf("ERROR: don't pass NULL file pointers; print_string\n");
     return;
   }
-  fprintf(dest, "(data: %s  ", (char *)to_print->data);
-  fprintf(dest, "height: %d)", to_print->height);
+  fprintf(dest, "(d: %s,", (char *)to_print->data);
+  fprintf(dest, "h: %d)", to_print->height);
 }
 
 /******************************************************************************
@@ -667,7 +689,7 @@ void print_string(node *to_print, FILE *dest) {
  *****************************************************************************/
 void print_int2(node *to_print, FILE *dest) {
   if (NULL == to_print) {
-    printf("ERROR: cannot print NULL node; print_int\n");
+    printf("ERROR: cannot print NULL node; print_int-%p\n", to_print);
     return;
   }
   if (NULL == dest) {

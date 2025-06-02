@@ -26,9 +26,9 @@ void avl_delete(const void *data);
 void insert(node **root, node *to_insert, CompareFunc compare);
 node *make_node(void *data);
 node *find_min(node *root);
-void delete_min(void);
+void delete_min(node *root);
 node *find_max(node *root);
-void delete_max(void);
+void delete_max(node *root);
 void print_tree(node *root, PrintFunc print, FILE *dest);
 
 // Helper function prototypes
