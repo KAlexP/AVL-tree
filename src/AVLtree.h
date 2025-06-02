@@ -22,8 +22,8 @@ typedef void (*PrintFunc)(node *to_print, FILE *dest);
 // Main Function prototypes
 node *AVLtree(void);
 void avl_free(node *root);
-void avl_delete(const void *data);
-void insert(node **root, node *to_insert, CompareFunc compare);
+void avl_delete(node *root, const void *data);
+void insert(node **root, void *to_insert, CompareFunc compare);
 node *make_node(void *data);
 node *find_min(node *root);
 void delete_min(node *root);

@@ -59,6 +59,22 @@ void avl_free(node *root) { //	Begin
 } //	End
 
 /*******************************************************************************
+ * Function Title: avl_delete
+ * Summary: This function looks for certain value, and if it's found then is
+ * 				 is removed from the tree.
+ *
+ * Inputs:
+ * 	const void *data: data to be deleted
+ * Outputs: n/a
+ ********************************************************************************
+ * Pseudocode
+ *   Begin
+ *
+ *   End
+ *******************************************************************************/
+void avl_delete(node *root, const void *data) {}
+
+/*******************************************************************************
  * Function Title: insert
  * Summary: easier to use function to insert nodes into the avl tree
  *
@@ -73,11 +89,12 @@ void avl_free(node *root) { //	Begin
  *
  *   End
  *******************************************************************************/
-void insert(node **root, node *to_insert, CompareFunc compare) {
+void insert(node **root, void *to_insert, CompareFunc compare) {
+  node *insert_node = make_node(to_insert);
   if (*root == NULL) {
-    *root = to_insert;
+    *root = insert_node;
   } else {
-    *root = rec_insert(to_insert, *root, compare);
+    *root = rec_insert(insert_node, *root, compare);
   }
 }
 
