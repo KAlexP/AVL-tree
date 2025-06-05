@@ -72,12 +72,12 @@ void avl_free(node *root) { //	Begin
  *
  *   End
  *******************************************************************************/
-void avl_remove(node **root, const void *data) {
+void avl_remove(node **root, const void *data, CompareFunc compare) {
   if (*root == NULL) {
     printf("Error: empty tree-avl_remove\n");
   } else {
     node *to_search = make_node(data);
-    *root = rec_remove(*root, data);
+    *root = rec_remove(*root, to_search, compare);
   }
 }
 
@@ -171,7 +171,7 @@ node *find_min(node *root) {
  *******************************************************************************/
 node *delete_min(node *root) {
   if (root->left != NULL) {
-    root = rec_delete_min(root->left);
+    root = rec_delete_min(root);
   } else {
     printf("root: %p\tl: %p\tr: %p\n", root, root->left, root->right);
   }
@@ -284,8 +284,8 @@ node *rec_remove(node *curr, node *to_delete, CompareFunc compare) {
   } else if (compare_res > 0) { // if to_delete is bigger go right
     curr->right = rec_remove(curr->right, to_delete, compare);
   } else { // node found
-  	if (curr->left != NULL && curr->right != NULL){
-			//curr
+    if (curr->left != NULL && curr->right != NULL) {
+      // curr
     }
   }
 }
@@ -592,11 +592,12 @@ node *rec_delete_min(node *curr) {
     curr->left = rec_delete_min(curr->left);
   } else {
     if (curr->right != NULL) { // if ever there is data pointed to by most left
-      printf("there is some data loss in rec_delete_min.\n");
+      curr->left = rec_delete_min(curr->right);
+    } else {
+      free(curr->data);
+      free(curr);
+      curr = NULL;
     }
-    free(curr->data);
-    free(curr);
-    curr = NULL;
   }
   return balance(curr);
 }
@@ -605,7 +606,7 @@ node *rec_delete_min(node *curr) {
  * Function Title: rec_delete_max
  * Summary: this recursive helper function finds the farthest right node, and
  * 				 then deletes it.
- * Inputs:
+ * Inputs
  * 	node *curr: the current node
  * Outputs:
  * 	node *: a pointer to the current node, so deleted node gets set to null
@@ -619,12 +620,13 @@ node *rec_delete_max(node *curr) {
   if (curr->right != NULL) {
     curr->right = rec_delete_max(curr->right);
   } else {
-    if (curr->left != NULL) {
-      printf("ERROR: data loss in rec_delete_max.\n");
+    if (curr->left != NULL) { // if there is data pointered to by most right
+      curr->right = rec_delete_max(curr->left);
+    } else {
+      free(curr->data);
+      free(curr);
+      curr = NULL;
     }
-    free(curr->data);
-    free(curr);
-    curr = NULL;
   }
   return balance(curr);
 }
