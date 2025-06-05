@@ -72,7 +72,7 @@ void avl_free(node *root) { //	Begin
  *
  *   End
  *******************************************************************************/
-void avl_remove(node **root, const void *data, CompareFunc compare) {
+void avl_remove(node **root, void *data, CompareFunc compare) {
   if (*root == NULL) {
     printf("Error: empty tree-avl_remove\n");
   } else {
@@ -122,7 +122,7 @@ void insert(node **root, void *to_insert, CompareFunc compare) {
  *			set left and right pointers to NULL
  *   End
  *******************************************************************************/
-node *make_node(const void *data) {
+node *make_node(void *data) {
   node *new_node = malloc(sizeof(node));
   new_node->data = data;
   new_node->height = 0;
@@ -283,11 +283,26 @@ node *rec_remove(node *curr, node *to_delete, CompareFunc compare) {
     curr->left = rec_remove(curr->left, to_delete, compare);
   } else if (compare_res > 0) { // if to_delete is bigger go right
     curr->right = rec_remove(curr->right, to_delete, compare);
-  } else { // node found
-    if (curr->left != NULL && curr->right != NULL) {
-      // curr
+  } else {                                           // node found
+    if (curr->left != NULL && curr->right != NULL) { // with 2 kids find small
+      node *min;
+      void *temp_data;
+      min = find_min(curr->right); // find smallest node
+      temp_data = curr->data;      // save temp node
+      curr->data = min->data;      // set curr data to be min->data
+      min->data = temp_data;       // set curr
+      curr->right = rec_remove(curr->right, to_delete, compare);
+    } else {
+      // set curr to be the correct pointer (a child node or NULL)
+      node *temp = curr;
+      curr = (curr->left != NULL) ? curr->left : curr->right;
+      // free the unnecessary memory
+      free(temp->data);
+      free(temp);
+      temp = NULL;
     }
   }
+  return balance(curr);
 }
 
 /*******************************************************************************
@@ -337,9 +352,9 @@ node *rec_insert(node *new_node, node *curr, CompareFunc compare) {
     return new_node;
   }
   compare_results = compare(curr, new_node);
-  if (compare_results < 0) {
+  if (compare_results > 0) { // if the results are smaller go left
     curr->left = rec_insert(new_node, curr->left, compare);
-  } else {
+  } else { // else go right
     curr->right = rec_insert(new_node, curr->right, compare);
   }
   return balance(curr);

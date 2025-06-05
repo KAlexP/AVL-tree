@@ -22,9 +22,9 @@ typedef void (*PrintFunc)(node *to_print, FILE *dest);
 // Main Function prototypes
 node *AVLtree(void);
 void avl_free(node *root);
-void avl_remove(node **root, const void *data, CompareFunc compare);
+void avl_remove(node **root, void *data, CompareFunc compare);
 void insert(node **root, void *to_insert, CompareFunc compare);
-node *make_node(const void *data);
+node *make_node(void *data);
 node *find_min(node *root);
 node *delete_min(node *root);
 node *find_max(node *root);

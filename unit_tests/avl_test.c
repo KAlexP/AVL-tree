@@ -87,5 +87,12 @@ int main(void) {
   root = delete_min(root);
   print_tree(root, print_int, stdout);
   printf("\n\n");
+  printf("remove 46;int\n");
+  printf("_____________________________________________________________________"
+         "_________\n\n");
+  void *to_delete = malloc(sizeof(int));
+  *(int *)to_delete = 46;
+  avl_remove(&root, to_delete, compare_int);
+  print_tree(root, print_int, stdout);
   return 0;
 }
