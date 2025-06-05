@@ -34,5 +34,29 @@ int main(void) {
     printf("insert complete...\n\n");
     print_tree(str_root, print_string, stdout);
   }
+  printf("delete_max;string\n");
+  printf("_____________________________________________________________________"
+         "_________\n\n");
+  delete_max(str_root);
+  print_tree(str_root, print_string, stdout);
+  printf("\n\n");
+  printf("delete_min;string\n");
+  printf("_____________________________________________________________________"
+         "_________\n\n");
+  delete_min(str_root);
+  print_tree(str_root, print_string, stdout);
+  printf("\n\n");
+  printf("delete_max;int\n");
+  printf("_____________________________________________________________________"
+         "_________\n\n");
+  root = delete_max(root);
+  print_tree(root, print_int, stdout);
+  printf("\n\n");
+  printf("delete_min;int\n");
+  printf("_____________________________________________________________________"
+         "_________\n\n");
+  root = delete_min(root);
+  print_tree(root, print_int, stdout);
+  printf("\n\n");
   return 0;
 }

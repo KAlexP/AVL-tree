@@ -22,16 +22,17 @@ typedef void (*PrintFunc)(node *to_print, FILE *dest);
 // Main Function prototypes
 node *AVLtree(void);
 void avl_free(node *root);
-void avl_delete(node *root, const void *data);
+void avl_remove(node **root, const void *data);
 void insert(node **root, void *to_insert, CompareFunc compare);
-node *make_node(void *data);
+node *make_node(const void *data);
 node *find_min(node *root);
-void delete_min(node *root);
+node *delete_min(node *root);
 node *find_max(node *root);
-void delete_max(node *root);
+node *delete_max(node *root);
 void print_tree(node *root, PrintFunc print, FILE *dest);
 
 // Helper function prototypes
+node *rec_remove(node *curr, node *to_delete, CompareFunc compare);
 node *rec_insert(node *new_node, node *curr, CompareFunc compare);
 void rec_print(node *curr, PrintFunc print, FILE *dest, int spaces);
 node *balance(node *curr);
@@ -40,6 +41,8 @@ node *one_left_rotation(node *to_rotate);
 node *two_right_rotation(node *to_rotate);
 node *two_left_rotation(node *to_rotate);
 int height(node *node);
+node *rec_delete_min(node *curr);
+node *rec_delete_max(node *curr);
 
 // CompareFunc prototypes
 int compare_int(const node *left, const node *right);

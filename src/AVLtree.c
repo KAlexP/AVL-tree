@@ -59,7 +59,7 @@ void avl_free(node *root) { //	Begin
 } //	End
 
 /*******************************************************************************
- * Function Title: avl_delete
+ * Function Title: remove
  * Summary: This function looks for certain value, and if it's found then is
  * 				 is removed from the tree.
  *
@@ -72,7 +72,14 @@ void avl_free(node *root) { //	Begin
  *
  *   End
  *******************************************************************************/
-void avl_delete(node *root, const void *data) {}
+void avl_remove(node **root, const void *data) {
+  if (*root == NULL) {
+    printf("Error: empty tree-avl_remove\n");
+  } else {
+    node *to_search = make_node(data);
+    *root = rec_remove(*root, data);
+  }
+}
 
 /*******************************************************************************
  * Function Title: insert
@@ -115,7 +122,7 @@ void insert(node **root, void *to_insert, CompareFunc compare) {
  *			set left and right pointers to NULL
  *   End
  *******************************************************************************/
-node *make_node(void *data) {
+node *make_node(const void *data) {
   node *new_node = malloc(sizeof(node));
   new_node->data = data;
   new_node->height = 0;
@@ -153,7 +160,8 @@ node *find_min(node *root) {
  * Function Title: delete_min
  * Summary: This function deletes the node with the smallest data value
  *
- * Inputs: n/a
+ * Inputs:
+ * 	node *root: the root of the tree to delete min value from
  * Outputs: n/a
  ********************************************************************************
  * Pseudocode
@@ -161,11 +169,13 @@ node *find_min(node *root) {
  *
  *   End
  *******************************************************************************/
-void delete_min(node *root) {
-  node *to_delete = find_min(root);
-  free(to_delete->data);
-  free(to_delete);
-  to_delete = NULL;
+node *delete_min(node *root) {
+  if (root->left != NULL) {
+    root = rec_delete_min(root->left);
+  } else {
+    printf("root: %p\tl: %p\tr: %p\n", root, root->left, root->right);
+  }
+  return root;
 }
 
 /*******************************************************************************
@@ -198,19 +208,23 @@ node *find_max(node *root) {
  * Function Title: delete_max
  * Summary: This function deletes the largest data node
  *
- * Inputs: n/a
- * Outputs: n/a
+ * Inputs:
+ * 	node *root: the root of the tree to delete the max value from
+ * Outputs:
+ * 	node *: the new root if it changed
  ********************************************************************************
  * Pseudocode
  *   Begin
  *
  *   End
  *******************************************************************************/
-void delete_max(node *root) {
-  node *to_delete = find_max(root);
-  free(to_delete->data);
-  free(to_delete);
-  to_delete = NULL;
+node *delete_max(node *root) {
+  if (root->right != NULL) {
+    root = rec_delete_max(root);
+  } else {
+    printf("root: %p\tl: %p\tr: %p", root, root->left, root->right);
+  }
+  return root;
 }
 
 /*******************************************************************************
@@ -244,6 +258,37 @@ void print_tree(node *tree, PrintFunc print, FILE *dest) {
 //		Below are helper function definitions
 //
 ///////////////////////////////////////////////////////////////////////////////
+
+/*******************************************************************************
+ * Function Title: rec_remove
+ * Summary: a helper function to recursively remove a node in the tree,
+ *					 given the data.
+ * Inputs:
+ * 	node *curr: the current node being examined
+ * 	node *to_delete: a node that we want to delete from tree
+ * 	CompareFunc: the function used to correctly compare the nodes
+ * Outputs:
+ * 	node *: a pointer to a node to ensure tree balance
+ ********************************************************************************
+ * Pseudocode
+ *   Begin
+ *
+ *   End
+ *******************************************************************************/
+node *rec_remove(node *curr, node *to_delete, CompareFunc compare) {
+  if (curr == NULL)
+    return curr;
+  int compare_res = compare(to_delete, curr);
+  if (compare_res < 0) { // if to_delete is smaller go left
+    curr->left = rec_remove(curr->left, to_delete, compare);
+  } else if (compare_res > 0) { // if to_delete is bigger go right
+    curr->right = rec_remove(curr->right, to_delete, compare);
+  } else { // node found
+  	if (curr->left != NULL && curr->right != NULL){
+			//curr
+    }
+  }
+}
 
 /*******************************************************************************
  * Function Title:	rec_insert
@@ -526,6 +571,62 @@ int height(node *node) {
     return -1;
   } else
     return node->height;
+}
+
+/*******************************************************************************
+ * Function Title: rec_delete_min
+ * Summary: this is a recursive helper function that gets to the farthest left
+ * 			    node, and then deletes it.
+ * Inputs:
+ * 	node *curr: the current node
+ * Outputs:
+ * 	node *: a pointer to the currect node, so deleted node gets set to null
+ ********************************************************************************
+ * Pseudocode
+ *   Begin
+ *
+ *   End
+ *******************************************************************************/
+node *rec_delete_min(node *curr) {
+  if (curr->left != NULL) {
+    curr->left = rec_delete_min(curr->left);
+  } else {
+    if (curr->right != NULL) { // if ever there is data pointed to by most left
+      printf("there is some data loss in rec_delete_min.\n");
+    }
+    free(curr->data);
+    free(curr);
+    curr = NULL;
+  }
+  return balance(curr);
+}
+
+/*******************************************************************************
+ * Function Title: rec_delete_max
+ * Summary: this recursive helper function finds the farthest right node, and
+ * 				 then deletes it.
+ * Inputs:
+ * 	node *curr: the current node
+ * Outputs:
+ * 	node *: a pointer to the current node, so deleted node gets set to null
+ *******************************************************************************
+ * Pseudocode
+ *   Begin
+ *
+ *   End
+ ******************************************************************************/
+node *rec_delete_max(node *curr) {
+  if (curr->right != NULL) {
+    curr->right = rec_delete_max(curr->right);
+  } else {
+    if (curr->left != NULL) {
+      printf("ERROR: data loss in rec_delete_max.\n");
+    }
+    free(curr->data);
+    free(curr);
+    curr = NULL;
+  }
+  return balance(curr);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
