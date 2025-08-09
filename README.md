@@ -1,6 +1,6 @@
 # AVL-tree
 
-An AVL tree written in c. ___Not complete___
+An AVL tree written in c. 
 
 <a id="table-of-contents"></a>
 ## Table of Contents 
